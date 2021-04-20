@@ -5,7 +5,7 @@ import { useStateValue } from "./StateProvider";
 import SubTotal from "./SubTotal";
 
 const Checkout = () => {
-  const [{ basket, user }, dispath] = useStateValue();
+  const [{ basket, user }] = useStateValue();
 
   return (
     <div className="checkout">
@@ -27,6 +27,7 @@ const Checkout = () => {
                 title={item.title}
                 price={item.price}
                 rating={item.rating}
+                hideButton={false}
               />
             );
           })}

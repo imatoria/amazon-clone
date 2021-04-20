@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import { useStateValue } from "./StateProvider";
 
 const Product = ({ id, title, price, image, rating }) => {
-  const [{ basket }, dispatch] = useStateValue();
+  const [, dispatch] = useStateValue();
 
   const addToBasket = () => {
     dispatch({
