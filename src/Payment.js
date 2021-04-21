@@ -23,18 +23,20 @@ const Payment = () => {
   const [clientSecret, setClientSecret] = useState(true);
 
   useEffect(() => {
-    const getClientSecret = async () => {
+    const totalAmount = getBasketTotal(basket);
+
+    const getClientSecret = async (totalAmount) => {
       const response = await axios({
         method: "post",
-        url: `/payments/create?total=${getBasketTotal(basket) * 100}`,
+        url: `/payments/create?total=${totalAmount * 100}`,
       });
       setClientSecret(response.data.clientSecret);
-
-      console.log("THE SECRET IS >>> ", response.data.clientSecret);
     };
 
-    getClientSecret();
-  }, [basket, setClientSecret]);
+    if (totalAmount > 0) {
+      getClientSecret(totalAmount);
+    }
+  }, [basket]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,7 +48,12 @@ const Payment = () => {
           card: elements.getElement(CardElement),
         },
       })
-      .then(({ paymentIntent }) => {
+      .then(({ error, paymentIntent }) => {
+        if (error) {
+          setProcessing(false);
+          return;
+        }
+
         db.collection("users")
           .doc(user?.uid)
           .collection("orders")
@@ -131,7 +138,7 @@ const Payment = () => {
                 />
 
                 <button disabled={processing || disabled || succeeded}>
-                  <span>{processing ? <p>Processing</p> : "Buy Now"}</span>
+                  <span>{processing ? "Processing" : "Buy Now"}</span>
                 </button>
               </div>
 

@@ -39,8 +39,8 @@ const Orders = () => {
     <div className="orders">
       <h1>Your Orders</h1>
       <div className="orders__order">
-        {orders?.map((order) => {
-          return <Order order={order} />;
+        {orders?.map((order, i) => {
+          return <Order key={i} order={order} />;
         })}
       </div>
     </div>
